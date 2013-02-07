@@ -1,0 +1,8 @@
+display_library: x, options="gui_debug"
+plugin_ctrl: unmapped=1, biosdev=1, speaker=0, extfpuirq=1, parallel=1, serial=1
+
+memory: guest=128, host=128
+cpu: count=1, ips=1000000
+cpuid: x86_64=1
+ata0-master: type=disk, path=system
+boot: disk
