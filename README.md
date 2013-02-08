@@ -45,3 +45,16 @@ Documentation
 -------------
 
 Every piece of code is documented in place.
+
+Notes
+-----
+
+ - Pure64 initializes long mode (64bits mode) for us, including the GDT.
+   We must do it ourself if we want to be multiboot compliant.
+
+Todo
+----
+
+ - Prepare exception and IRQ handling
+ - Write text to the screen (console code)
+ - Paging and memory allocation

@@ -1,9 +1,9 @@
 NASM = nasm
 CC = clang
-CFLAGS = -nostdlib -nostdinc -fno-builtin -fno-stack-protector
+CFLAGS = -m64 -W -nostdlib -nostdinc -fno-builtin -fno-stack-protector
 BUILD = build
 
-SRCS = src/start.c
+SRCS = src/start.c src/interrupts.c
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${SRCS:.c=.o})
 
 # The system image must be a valid disk so we compute a valid size
