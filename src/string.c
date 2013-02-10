@@ -107,7 +107,7 @@ char                *itoa(int nbr, char *buf, int radix)
 long int            strtol(const char *ptr, char **endptr, int base)
 {
     const char      *base_table = choose_table(base);
-    int             isneg = 1;
+    int             isneg = 0;
     long int        number = 0;
     int             val;
 
@@ -118,16 +118,18 @@ long int            strtol(const char *ptr, char **endptr, int base)
             case '+':
                 break;
             case '-':
-                isneg = 0;
+                isneg = 1;
                 break;
             default:
                 val = in_base(*ptr, base_table);
                 if (val == -1)
-                  break;
+                    goto end;
                 number = number * base - val;
+                break;
           }
       }
 
+end:
     COND_NEGATE(isneg, number);
 
     if (endptr != 0)
