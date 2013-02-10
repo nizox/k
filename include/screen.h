@@ -28,7 +28,7 @@ typedef struct
 }                   cursor;
 
 void                screen_clear(void);
-void                putchar(char c);
+void                screen_write(const char *ptr, unsigned int size);
 void                set_bg_color(EGA_COLORS color);
 void                set_fg_color(EGA_COLORS color);
 void                screen_init(EGA_COLORS bg, EGA_COLORS fg);

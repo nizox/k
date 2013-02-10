@@ -1,50 +1,39 @@
 #include "string.h"
 
-static const char   *base2 = "01";
-static const char   *base3 = "012";
-static const char   *base4 = "0123";
-static const char   *base8 = "01234567";
-static const char   *base10 = "0123456789";
-static const char   *base16 = "0123456789abcdef";
+MAKE_BASE_TABLE(2, "01", "b");
+MAKE_BASE_TABLE(3, "012", "");
+MAKE_BASE_TABLE(4, "0123", "");
+MAKE_BASE_TABLE(8, "01234567", "0");
+MAKE_BASE_TABLE(10, "0123456789", "");
+MAKE_BASE_TABLE(16, "0123456789abcdef", "0x");
 
-static const char   *choose_table(int base)
+static const base_data   *choose_table(int base)
 {
-    const char      *base_table;
-
     switch (base)
       {
         case 2:
-            base_table = base2;
-            break;
+            return &base2;
         case 3:
-            base_table = base2;
-            break;
+            return &base3;
         case 4:
-            base_table = base2;
-            break;
+            return &base4;
         case 8:
-            base_table = base8;
-            break;
-        case 10:
-            base_table = base10;
-            break;
+            return &base8;
         case 16:
-            base_table = base16;
-            break;
+            return &base16;
+        case 10:
         default:
-            base_table = base10;
-            break;
+            return &base10;
       }
-    return base_table;
 }
 
-static int          in_base(char c, const char *base_table)
+static int          in_base(char c, const base_data *bd)
 {
     int             pos;
 
-    for (pos = 0; base_table[pos] != 0; ++pos)
+    for (pos = 0; bd->base_table[pos] != 0; ++pos)
       {
-        if (base_table[pos] == c)
+        if (bd->base_table[pos] == c)
             return pos;
       }
     return -1;
@@ -59,25 +48,18 @@ static int          max_power(int nbr, int base)
     return power;
 }
 
-/*
- * Handles 2, 8, 16 and 32 radices
- *
- * Buffer sizes corresponding to radix:
- * 2 -> 33
- * 8 -> 13
- * 10 -> 12
- * 16 -> 10
- */
 char                *itoa(int nbr, char *buf, int radix)
 {
     int             i = 0;
     int             mult;
     int             power = max_power(nbr, radix);
-    const char      *base_table = choose_table(radix);
+    const base_data *bd = choose_table(radix);
 
     if (nbr == 0)
       {
-        buf[0] = base_table[0];
+        strncpy(buf, bd->prefix, bd->prefix_len);
+        i += bd->prefix_len;
+        buf[i] = bd->base_table[0];
         ++i;
       }
     else
@@ -90,10 +72,12 @@ char                *itoa(int nbr, char *buf, int radix)
         else
             nbr = -nbr;
 
+        strncpy(buf + i, bd->prefix, bd->prefix_len);
+        i += bd->prefix_len;
         while (power != 0)
           {
             mult = nbr / power;
-            buf[i] = base_table[-mult];
+            buf[i] = bd->base_table[-mult];
             nbr %= power;
             power /= radix;
             ++i;
@@ -106,7 +90,7 @@ char                *itoa(int nbr, char *buf, int radix)
 
 long int            strtol(const char *ptr, char **endptr, int base)
 {
-    const char      *base_table = choose_table(base);
+    const base_data *bd = choose_table(base);
     int             isneg = 0;
     long int        number = 0;
     int             val;
@@ -121,7 +105,7 @@ long int            strtol(const char *ptr, char **endptr, int base)
                 isneg = 1;
                 break;
             default:
-                val = in_base(*ptr, base_table);
+                val = in_base(*ptr, bd);
                 if (val == -1)
                     goto end;
                 number = number * base - val;
@@ -182,7 +166,16 @@ char                *strcpy(char *dest, const char *src)
 
 char                *strncpy(char *dest, const char *src, unsigned int n)
 {
-    return memcpy(dest, src, n);
+    char            *save = dest;
+
+    while (*src && n)
+      {
+        *dest = *src;
+        ++src;
+        ++dest;
+        --n;
+      }
+    return save;
 }
 
 char                *strcat(char *dest, const char *src)

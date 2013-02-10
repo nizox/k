@@ -52,7 +52,7 @@ void                screen_clear(void)
     point.y = 0;
 }
 
-void                putchar(char c)
+static void         screen_write_char(char c)
 {
     unsigned char   *video;
 
@@ -81,6 +81,12 @@ void                putchar(char c)
       }
     if (point.y > LINES)
         scroll(point.y - LINES);
+}
+
+void                 screen_write(const char *ptr, unsigned int size)
+{
+    for (; size > 0; --size, ++ptr)
+        screen_write_char(*ptr);
 }
 
 void                set_bg_color(EGA_COLORS color)

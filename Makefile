@@ -1,6 +1,6 @@
 NASM = nasm
 CC = clang
-CFLAGS = -m64 -W -nostdlib -nostdinc -fno-builtin -fno-stack-protector
+CFLAGS = -m64 -W -nostdlib -fno-builtin -fno-stack-protector -mno-red-zone
 CFLAGS += -Iinclude
 BUILD = build
 
@@ -8,7 +8,8 @@ SRCS = 	src/start.c 			\
 		src/interrupts.c 		\
 		src/screen.c			\
 		src/string.c			\
-		src/print.c
+		src/print.c				\
+		src/printk.c
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${SRCS:.c=.o})
 

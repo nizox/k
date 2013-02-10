@@ -31,6 +31,9 @@ void                vprintk(const char *fmt, va_list ap)
                 case 'o':
                     print(itoa((int)va_arg(ap, int), buf, 8));
                     break;
+                case 'b':
+                    print(itoa((int)va_arg(ap, int), buf, 2));
+                    break;
                 case '%':
                     putchar(*fmt);
                     break;

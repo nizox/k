@@ -13,8 +13,6 @@ extern char kY;
 void
 _start(void)
 {
-    char        buf[34];
-
     screen_init_default();
     puts("Loading IDT ...");
     init_interrupts();
