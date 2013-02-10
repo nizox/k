@@ -14,7 +14,8 @@ CSRCS = 	src/c/start.c			\
 			src/c/printk.c
 
 CPPSRCS = 	src/_cplusplus.cpp		\
-			src/start.cpp
+			src/start.cpp			\
+			src/video.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 

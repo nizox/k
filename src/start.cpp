@@ -2,6 +2,9 @@
 #include "c/screen.h"
 #include "c/interrupts.h"
 
+#include "video.h"
+#include "std.h"
+
 /*
  * This is the entry point of the kernel
  * we must never return from this function
@@ -9,10 +12,11 @@
 extern "C"
 void            _cppstart(void)
 {
-    screen_init_default();
-    puts("Loading IDT ...");
+    video       screen;
+
+    screen << "Loading IDT ..." << std::endl;
     init_interrupts();
-    puts("IDT loaded.");
+    screen << "IDT loaded." << std::endl;
 
     /* Put a fun message here */
     for(;;);
