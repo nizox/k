@@ -1,0 +1,43 @@
+The Kernel is able to be compiled using both C and C++ programming languages.
+However, a few requirements need to be provided in order to make these
+languages coexist.
+
+I - C side
+
+In order to make the C++ code being able to manipulate C code, it is necessary
+to inhibit symbol mangling by C++ compilers in C header files.
+To do do, simply embrace your C declarations with the following statement:
+
+>   #idef __cplusplus
+>   extern "C" {
+>   #endif
+>   
+>   // Some C declarations
+>   
+>   #idef __cplusplus
+>   }
+>   #endif
+
+note: it is wiser to declare the header guard before the mangling directive.
+
+II - C++ side
+
+Most of the C++ language is usable for kernel programming. However
+some restrictions exist for certain features due to their heavy is of
+the C++ runtime:
+
+- RTTI is not available (ie. no dynamic_cast, typeinfo etc.)
+- Exceptions are not available
+- Global objects constructors are not automatically called since start-up
+  code are dismissed.
+  Therefore, it is necessary to call them manually, in the start-up routine, for
+  example.
+
+III - Current implementation
+
+For the moment, the Kernel does not implement dynamic allocation via heap-alike
+mecanism. Therefore, place-holding implementations of the dynamic (de)allocation
+operators (new, new[], delete, delete[]) are provided and return a null pointer
+for allocation, and do nothing for deallocation.
+
+An improved implementation should be provided upon presence of suche tools.

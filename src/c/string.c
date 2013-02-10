@@ -1,4 +1,4 @@
-#include "string.h"
+#include "c/string.h"
 
 MAKE_BASE_TABLE(2, "01", "b");
 MAKE_BASE_TABLE(3, "012", "");
@@ -132,7 +132,7 @@ unsigned int        strlen(const char *str)
 
 void                *memset(void *s, int c, unsigned int n)
 {
-    char            *ptr = s;
+    char            *ptr = (char *)s;
 
     for (; ptr - (char *)s < n; ++ptr)
         *ptr = (char)c;
@@ -142,8 +142,8 @@ void                *memset(void *s, int c, unsigned int n)
 
 void                *memcpy(void *dest, const void *src, unsigned int n)
 {
-    char            *cdest = dest;
-    const char      *csrc = src;
+    char            *cdest = (char *)dest;
+    const char      *csrc = (char *)src;
 
     for (; n; --n, ++cdest, ++csrc)
         *cdest = *csrc;

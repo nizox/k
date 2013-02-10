@@ -1,6 +1,10 @@
 #ifndef KERNEL_STRING_H_
 #define KERNEL_STRING_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Branchless conditional negate. */
 #define COND_NEGATE(cond, number) (number) = ((number) ^ -(!cond)) + (!cond)
 
@@ -23,5 +27,9 @@ char                *strcpy(char *dest, const char *src);
 char                *strncpy(char *dest, const char *src, unsigned int n);
 char                *strcat(char *dest, const char *src);
 char                *strncat(char *dest, const char *src, unsigned int n);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* end of include guard: KERNEL_STRING_H_ */

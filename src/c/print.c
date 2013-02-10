@@ -1,6 +1,6 @@
-#include "screen.h"
-#include "string.h"
-#include "print.h"
+#include "c/screen.h"
+#include "c/string.h"
+#include "c/print.h"
 
 void                putchar(char c)
 {

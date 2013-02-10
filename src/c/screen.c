@@ -1,4 +1,4 @@
-#include "screen.h"
+#include "c/screen.h"
 
 #define SCREEN_START    0xb8000
 #define SCREEN_SIZE     0xfa0

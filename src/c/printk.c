@@ -1,7 +1,8 @@
 #include <stdarg.h>
-#include "string.h"
-#include "screen.h"
-#include "print.h"
+
+#include "c/string.h"
+#include "c/screen.h"
+#include "c/print.h"
 
 void                vprintk(const char *fmt, va_list ap)
 {

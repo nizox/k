@@ -1,17 +1,22 @@
 NASM = nasm
 CC = clang
+CXX = clang++
 CFLAGS = -m64 -W -nostdlib -fno-builtin -fno-stack-protector -mno-red-zone
 CFLAGS += -Iinclude
+CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti
 BUILD = build
 
-SRCS = 	src/start.c 			\
-		src/interrupts.c 		\
-		src/screen.c			\
-		src/string.c			\
-		src/print.c				\
-		src/printk.c
+CSRCS = 	src/c/start.c			\
+			src/c/interrupts.c 		\
+			src/c/screen.c			\
+			src/c/string.c			\
+			src/c/print.c			\
+			src/c/printk.c
 
-OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${SRCS:.c=.o})
+CPPSRCS = 	src/_cplusplus.cpp		\
+			src/start.cpp
+
+OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 
 # The system image must be a valid disk so we compute a valid size
 # It should make a 10MiB image
@@ -20,13 +25,12 @@ HEADS = 16
 SPT = 63 # Sector Per Track
 SECTORS = $(shell echo "${CYLINDERS} * ${HEADS} * ${SPT}" | bc)
 
-
 all: ${BUILD}/system
 
 
 ${BUILD}:
 	mkdir -p $@
-	mkdir -p $@/obj/src
+	mkdir -p $@/obj/src/c
 	cp util/bochsrc $@/bochsrc
 
 
@@ -52,6 +56,9 @@ ${BUILD}/bootloader: ${BUILD}/mbr ${BUILD}/loader
 
 ${BUILD}/obj/%.o: %.c
 	${CC} ${CFLAGS} -c -o $@ $<
+
+${BUILD}/obj/%.o: %.cpp
+	${CXX} ${CXXFLAGS} -c -o $@ $<
 
 
 ${BUILD}/kernel: util/linker.ld ${BUILD} ${OBJS}

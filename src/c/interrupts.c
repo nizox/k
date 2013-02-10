@@ -1,4 +1,4 @@
-#include "interrupts.h"
+#include "c/interrupts.h"
 
 struct idt_descriptor   idt_gates[256];
 struct idt_register     idtr;

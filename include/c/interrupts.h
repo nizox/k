@@ -1,6 +1,10 @@
 #ifndef INTERRUPTS_H
 #define INTERRUPTS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "types.h"
 
 /* Structures described in Intel Vol. 3A 6.14 */
@@ -24,5 +28,9 @@ struct idt_descriptor
 #pragma pack(pop)
 
 void init_interrupts(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
