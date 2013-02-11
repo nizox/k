@@ -121,7 +121,7 @@ end:
     return number;
 }
 
-unsigned int        strlen(const char *str)
+size_t              strlen(const char *str)
 {
     const char      *endptr;
 
@@ -130,17 +130,17 @@ unsigned int        strlen(const char *str)
     return endptr - str;
 }
 
-void                *memset(void *s, int c, unsigned int n)
+void                *memset(void *s, int c, size_t n)
 {
     char            *ptr = (char *)s;
 
-    for (; ptr - (char *)s < n; ++ptr)
+    for (; (size_t)(ptr - (char *)s) < n; ++ptr)
         *ptr = (char)c;
 
     return s;
 }
 
-void                *memcpy(void *dest, const void *src, unsigned int n)
+void                *memcpy(void *dest, const void *src, size_t n)
 {
     char            *cdest = (char *)dest;
     const char      *csrc = (char *)src;
@@ -164,7 +164,7 @@ char                *strcpy(char *dest, const char *src)
     return save;
 }
 
-char                *strncpy(char *dest, const char *src, unsigned int n)
+char                *strncpy(char *dest, const char *src, size_t n)
 {
     char            *save = dest;
 
@@ -195,7 +195,7 @@ char                *strcat(char *dest, const char *src)
     return dest;
 }
 
-char                *strncat(char *dest, const char *src, unsigned int n)
+char                *strncat(char *dest, const char *src, size_t n)
 {
     int             i = 0;
     int             j = 0;
