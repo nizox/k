@@ -49,6 +49,8 @@ public:
 private:
     colors              fg_;
     colors              bg_;
+
+    static bool         initialized_;
 };
 
 #endif /* end of include guard: KERNEL_VIDEO_H */

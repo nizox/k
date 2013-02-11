@@ -4,10 +4,18 @@
 #include "c/screen.h"
 #include "c/print.h"
 
+bool                video::initialized_ = false;
+
 video::video(colors fg, colors bg)
     : fg_(fg), bg_(bg)
 {
-    ::screen_init(static_cast<EGA_COLORS>(bg_), static_cast<EGA_COLORS>(fg_));
+    if (!initialized_)
+      {
+        ::screen_init(static_cast<EGA_COLORS>(bg_), static_cast<EGA_COLORS>(fg_));
+        initialized_ = true;
+      }
+    else
+        this->set_cursor(fg, bg);
 }
 
 video::~video()
