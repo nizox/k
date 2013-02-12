@@ -1,4 +1,5 @@
 #include "c/interrupts.h"
+#include "c/exceptions.h"
 
 struct idt_descriptor   idt_gates[256];
 struct idt_register     idtr;
@@ -18,22 +19,13 @@ idt_gate_set(short index, uint64_t ptr, uint8_t flags)
 }
 
 void
-exception_handler(void)
-{
-    for(;;);
-}
-
-void
 init_idt(void)
 {
     short i;
 
-    /* Initialize exception gates */
-    for (i = 0; i < 32; ++i)
-    {
-        /* 0x8E is the 64 bits interrupt gate flag */
-        idt_gate_set(i, (uint64_t) &exception_handler, 0x8E);
-    }
+    memset(idt_gates, 0, sizeof(idt_gates) * sizeof(*idt_gates));
+    /* 0x8E is the 64 bits interrupt gate flag */
+    idt_gate_set(13, (uint64_t) &exc_gp, 0x8E);
 
     idtr.base = (uint64_t) &idt_gates;
     idtr.limit = sizeof(idt_gates) * sizeof(*idt_gates) - 1;

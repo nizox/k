@@ -27,6 +27,42 @@ struct idt_descriptor
 };
 #pragma pack(pop)
 
+struct exception_frame
+{
+    /* Exception number */
+    uint64_t reason;
+    /* Saved registers */
+    uint64_t rdi;
+
+    /* Optional exception error code */
+    uint64_t error;
+    /* Default interruption args */
+    uint64_t rip;
+    uint64_t cs;
+    uint64_t rflags;
+    uint64_t rsp;
+    uint64_t ss;
+};
+
+/*
+ * Nice trick from Clang to make C function without stack manipulation
+ */
+#define EXC_ERRFUNC(name, num)                          \
+__attribute__((naked)) void                             \
+name (void)                                             \
+{                                                       \
+    __asm__ (                                           \
+        "pushq %rdi"                "\n"                \
+        "pushq $" # num             "\n"                \
+        "movq %rsp, %rdi"           "\n"                \
+        "call " # name "_handler"   "\n"                \
+        "addq $8, %rsp"             "\n"                \
+        "popq %rdi"                 "\n"                \
+        "iretq"                     "\n"                \
+    );                                                  \
+}                                                       \
+void name ## _handler
+
 void init_interrupts(void);
 
 #ifdef __cplusplus
