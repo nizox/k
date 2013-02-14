@@ -6,15 +6,16 @@ CFLAGS += -Iinclude
 CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti
 BUILD = build
 
-CSRCS = 	src/c/start.c			\
-			src/c/interrupts.c 		\
-			src/c/exceptions.c 		\
+CSRCS = 	src/c/start.c		\
 			src/c/screen.c			\
 			src/c/string.c			\
 			src/c/print.c			\
 			src/c/printk.c
 
 CPPSRCS = 	src/_cplusplus.cpp		\
+			src/exceptions.cpp		\
+			src/isr.cpp		\
+			src/idt.cpp		\
 			src/start.cpp			\
 			src/video.cpp
 

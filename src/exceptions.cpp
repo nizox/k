@@ -1,12 +1,12 @@
-#include "c/interrupts.h"
-#include "c/exceptions.h"
-#include "c/print.h"
+#include "exceptions.h"
+#include "video.h"
+#include "std.h"
 
 
 /*
  * Exception and interrupt reference Intel Vol. 3A 6.15
  */
-char * exception_names[] = {
+const char * exception_names[] = {
  /* 0 */  "Divide Error Exception",
  /* 1 */  "Debug Exception",
  /* 2 */  "NMI Interrupt",
@@ -37,13 +37,12 @@ print_exception(unsigned short i)
 
     if (i < sizeof(exception_names) / sizeof(*exception_names))
     {
-        ptr = exception_names[i];
+        video() << exception_names[i] << std::endl;
     }
     else
     {
-        ptr = "Exception";
+        video() << "Exception " << i << std::endl;
     }
-    print(ptr);
 }
 
 
@@ -82,7 +81,12 @@ EXC_ERRFUNC(exc_alignment_check, 17)(struct exception_frame * frame)
     print_exception(frame->exc);
 }
 
-__attribute__((naked)) void
+/*
+ * Catch all special handler. we don't push the exception number here because
+ * we don't know it. But as we can get the EAX that was pushed on the stack
+ * instead of the error field, we are able to compute the exception number !
+ */
+extern "C" __attribute__((naked)) void
 exc_catch_all(void)
 {
     __asm__ (
@@ -127,23 +131,11 @@ exc_catch_all(void)
 
 call_instruction exc_default_handlers[IDT_SIZE];
 
-void
+extern "C" void
 exc_catch_all_handler(struct exception_frame *frame)
 {
+    /* Compute the exception number */
     frame->exc = (frame->error - (uint64_t) exc_default_handlers - 5)
         / sizeof(*exc_default_handlers);
     print_exception(frame->exc);
-}
-
-void
-init_catch_all_exceptions(void)
-{
-    short i;
-    uint64_t r;
-
-    for (i = 0; i < IDT_SIZE; ++i)
-    {
-        r = (void *) (exc_default_handlers + i) - (void *) exc_catch_all;
-        exc_default_handlers[i] = (- r - 5) << 8 | 0xE8;
-    }
 }

@@ -1,44 +1,8 @@
-#ifndef INTERRUPTS_H
-#define INTERRUPTS_H
+#ifndef C_EXCEPTIONS_H
+#define C_EXCEPTIONS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "types.h"
-
-#define IDT_SIZE  256
-
-/* Structures and enum described in Intel Vol. 3A 6.14 */
-#pragma pack(push, 1)
-struct idt_register
-{
-    uint64_t limit : 16;
-    uint64_t base  : 64;
-};
-
-struct idt_descriptor
-{
-    uint64_t low_word    : 16;
-    uint64_t ss          : 16;
-    uint64_t ist         : 3;
-    uint64_t reserved0   : 5;
-    uint64_t type        : 4;
-    uint64_t reserved1   : 1;
-    uint64_t dpl         : 2;
-    uint64_t p           : 1;
-    uint64_t high_word   : 16;
-    uint64_t high_dword  : 32;
-    uint64_t reserved2   : 32;
-};
-#pragma pack(pop)
-
-enum idt_gate_type
-{
-    TRAP = 0xE,
-    INTERRUPT = 0xF
-};
-
+#include "c/types.h"
+#include "idt.h"
 
 struct exception_frame
 {
@@ -86,7 +50,7 @@ struct exception_frame
  * EXC_ERRFUNC is made for interrupts that give an error code.
  */
 #define EXC_ERRFUNC(name, num)                          \
-__attribute__((naked)) void                             \
+extern "C" __attribute__((naked)) void                  \
 name (void)                                             \
 {                                                       \
     __asm__ (                                           \
@@ -127,10 +91,10 @@ name (void)                                             \
         "iretq"                     "\n"                \
     );                                                  \
 }                                                       \
-void name ## _handler
+extern "C" void name ## _handler
 
 #define EXC_FUNC(name, num)                             \
-__attribute__((naked)) void                             \
+extern "C" __attribute__((naked)) void                  \
 name (void)                                             \
 {                                                       \
     __asm__ (                                           \
@@ -173,13 +137,24 @@ name (void)                                             \
         "iretq"                     "\n"                \
     );                                                  \
 }                                                       \
-void name ## _handler
+extern "C" void name ## _handler
 
-void init_interrupts(void);
-void idt_gate_set(short index, void * ptr, enum idt_gate_type type, short dpl);
+/*
+ * This structure will contain the JMP instruction to the catch all
+ * exception handler.
+ */
+typedef uint64_t call_instruction;
 
-#ifdef __cplusplus
-}
-#endif
+extern call_instruction exc_default_handlers[IDT_SIZE];
+
+extern "C" void exc_catch_all(void);
+
+extern "C" void exc_double_fault(void);
+extern "C" void exc_invalid_tss(void);
+extern "C" void exc_no_segment(void);
+extern "C" void exc_stack_fault(void);
+extern "C" void exc_general_protection(void);
+extern "C" void exc_page_fault(void);
+extern "C" void exc_alignment_check(void);
 
 #endif
