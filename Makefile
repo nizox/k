@@ -3,7 +3,7 @@ CC = clang
 CXX = clang++
 CFLAGS = -m64 -W -nostdlib -fno-builtin -fno-stack-protector -mno-red-zone
 CFLAGS += -Iinclude
-CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti
+CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti -std=c++11
 BUILD = build
 
 CSRCS = 	src/c/start.c			\
