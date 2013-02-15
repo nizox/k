@@ -17,7 +17,8 @@ CPPSRCS = 	src/_cplusplus.cpp		\
 			src/isr.cpp		\
 			src/idt.cpp		\
 			src/start.cpp			\
-			src/video.cpp
+			src/video.cpp			\
+			src/video_attr.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 

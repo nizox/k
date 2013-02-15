@@ -14,9 +14,9 @@ void            _cppstart(void)
 {
     video       screen;
 
-    screen << "Loading IDT ..." << std::endl;
+    screen << "Loading IDT ...";
     _isr.setup();
-    screen << "IDT loaded." << std::endl;
+    screen << video::printok << std::endl;
 
     /* Put a fun message here */
     for(;;);
