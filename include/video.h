@@ -27,21 +27,6 @@ public:
         white
       };
 
-    enum    level
-      {
-        normal,
-        warning,
-        error,
-        ok
-      };
-
-    enum    status
-      {
-        printok,
-        printwarning,
-        printerror
-      };
-
     static const colors DEFAULT_FG = lightgray;
     static const colors DEFAULT_BG = blue;
 
@@ -87,12 +72,10 @@ public:
     virtual video&      operator<<(unsigned int number);
     virtual video&      operator<<(const void* ptr);
     virtual video&      operator<<(std::termination);
-    video&              operator<<(level lvl);
-    video&              operator<<(status st);
+    video&              operator<<(const attribute& attr);
 
 private:
     attribute           attr_;
-    attribute           save_;
 
     static bool         initialized_;
 };

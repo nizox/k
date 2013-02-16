@@ -7,7 +7,7 @@
 bool                video::initialized_ = false;
 
 video::video(colors fg, colors bg)
-    : attr_(fg, bg), save_(fg, bg)
+    : attr_(fg, bg)
 {
     if (!initialized_)
       {
@@ -108,43 +108,8 @@ video&              video::operator<<(std::termination)
     return *this;
 }
 
-video&              video::operator<<(level lvl)
+video&              video::operator<<(const video::attribute& attr)
 {
-    switch (lvl)
-      {
-        case warning:
-            this->set_attr(brightyellow, black);
-            break;
-        case error:
-            this->set_attr(red, black);
-            break;
-        case ok:
-            this->set_attr(green, black);
-            break;
-        case normal:
-        default:
-            this->set_attr(save_);
-            break;
-      };
-    return *this;
-}
-
-video&              video::operator<<(status st)
-{
-    switch (st)
-      {
-        case printok:
-            *this << ok << "\t[ ok ]";
-            break;
-        case printwarning:
-            *this << warning << "\t[ warning ]";
-            break;
-        case printerror:
-            *this << error << "\t[ error ]";
-            break;
-        default:
-            break;
-      }
-    *this << normal;
+    this->set_attr(attr);
     return *this;
 }
