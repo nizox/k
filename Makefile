@@ -10,7 +10,8 @@ CSRCS = 	src/c/start.c		\
 			src/c/screen.c			\
 			src/c/string.c			\
 			src/c/print.c			\
-			src/c/printk.c
+			src/c/printk.c			\
+			src/c/heap.c
 
 CPPSRCS = 	src/_cplusplus.cpp		\
 			src/exceptions.cpp		\

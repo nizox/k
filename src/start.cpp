@@ -1,5 +1,6 @@
 #include "c/print.h"
 #include "c/screen.h"
+#include "c/heap.h"
 
 #include "isr.h"
 #include "video.h"

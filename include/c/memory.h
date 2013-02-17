@@ -37,6 +37,12 @@ extern "C" {
  * +-----------------------+    0x300000
  * | Stack                 |
  * +-----------------------+    0x3FFFF
+ *
+ *
+ * Sizes:
+ * Kernel Code: 1Mib
+ * Stack:       1Mib
+ * Heap:        1Mib
  */
 
 #define PML4            0x2000
@@ -45,9 +51,13 @@ extern "C" {
 #define MEGABYTE        (1024 * KILOBYTE)
 #define GIGABYTE        (1024 * MEGABYTE)
 
-#define STACKBASE       0x400000              /* Stack is at the end of the first page */
-#define STACKSIZE       (MEGABYTE)        /* 512KiB stack */
+#define STACKBASE       0x400000                /* Stack is at the end of the first page */
+#define STACKSIZE       (MEGABYTE)              /* 512KiB stack */
 #define STACKLIMIT      STACKBASE - STACKSIZE
+
+#define HEAPBASE        0x200000
+#define HEAPSIZE        (MEGABYTE)
+#define HEAPLIMIT       HEAPBASE + HEAPSIZE
 
 #define relocate_stack(base)        \
 do {                                \
