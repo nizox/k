@@ -18,6 +18,5 @@ void            _cppstart(void)
     _isr.setup();
     screen << "IDT Loaded." << std::endl;
 
-    /* Put a fun message here */
     for(;;);
 }
