@@ -5,51 +5,57 @@
 extern "C" {
 #endif
 
-/*
- * Kernel Memory Mapping
- *
- * +-----------------------+    0x0
- * | IDT                   |
- * +-----------------------+    0xFFF
- * +-----------------------+    0x1000
- * | GDT                   |
- * +-----------------------+    0x1FFF
- * +-----------------------+    0x2000
- * | PML4                  |
- * +-----------------------+    0x2FFF
- * +-----------------------+    0x3000
- * | PDP                   |
- * +-----------------------+    0x3FFF
- *        ........
- * +-----------------------+    0x10000
- * | Page Directory room   |
- * +-----------------------+    0x4FFFF
- *        ........
- * +-----------------------+    0x100000
- * | Kernel Code           |
- * +-----------------------+    0x1FFFFF
- *
- * ======= Next Page =======
- *
- * +-----------------------+    0x200000
- * | Heap                  |
- * +-----------------------+    0x2FFFFF
- * +-----------------------+    0x300000
- * | Stack                 |
- * +-----------------------+    0x3FFFF
- *
- *
- * Sizes:
- * Kernel Code: 1Mib
- * Stack:       1Mib
- * Heap:        1Mib
- */
+#include "c/types.h"
 
-#define PML4            0x2000
+/*
+ * Units
+ */
 
 #define KILOBYTE        1024
 #define MEGABYTE        (1024 * KILOBYTE)
 #define GIGABYTE        (1024 * MEGABYTE)
+
+/*
+ * Setup
+ */
+
+#define PURE64_PAGE_SIZE    (2 * MEGABYTE)
+
+/*
+ * Tables
+ */
+
+#define PURE64_IDT          0x1000
+#define PURE64_IDT_SIZE     256
+#define PURE64_GDT          0x1000
+#define PURE64_GDT_SIZE     256
+#define PURE64_PML4         0x2000
+#define PURE64_PML4_SIZE    512
+#define PURE64_PDP          0x3000
+#define PURE64_PDP_SIZE     512
+#define PURE64_PD           0x10000
+#define PURE64_PD_SIZE      ((256 * KILOBYTE) / 8)
+
+/*
+ * Constant addresses
+ */
+
+#define VGA_MEM         0xa0000
+#define VGA_TEXT        0xb8000
+#define VGA_TEXT_SIZE   0xfa0
+#define VGA_TEXT_END    VGA_TEXT+VGA_TEXT_SIZE
+
+/*
+ * Hardware informations
+ */
+#define PURE64_SYSTEM_VARIABLES 0x5000
+
+#define SYSTEM_VALUE(type, padd) (*((type*)(PURE64_SYSTEM_VARIABLES + (padd))))
+
+#define CPU_SPEED               SYSTEM_VALUE(uint16_t, 0x10)
+#define ACTIVE_CPU_CORES        SYSTEM_VALUE(uint16_t, 0x12)
+#define DETECTED_CPU_CORES      SYSTEM_VALUE(uint16_t, 0x14)
+#define AVAILABLE_MEMORY        SYSTEM_VALUE(uint32_t, 0x20)
 
 #define STACKBASE       0x400000                /* Stack is at the end of the first page */
 #define STACKSIZE       (MEGABYTE)              /* 512KiB stack */
@@ -64,7 +70,7 @@ do {                                \
       asm(                          \
           "mov %0, %%rax \n"        \
           "mov %%rax, %%rsp \n"     \
-          :: "i"(base)              \
+          :: "g"(base)              \
           );                        \
 } while (0)
 

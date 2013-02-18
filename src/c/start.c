@@ -1,5 +1,6 @@
 #include "c/memory.h"
- 
+#include "c/types.h"
+
 void    _cppstart();
 
 /*
@@ -9,6 +10,9 @@ void    _cppstart();
  */
 void _start()
 {
-    relocate_stack(STACKBASE);
+    /*
+     * Relocate the stack at the end of the last page inside the available memory.
+     */
+    relocate_stack(AVAILABLE_MEMORY * MEGABYTE);
     _cppstart();
 }

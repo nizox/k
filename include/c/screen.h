@@ -5,6 +5,14 @@
 extern "C" {
 #endif
 
+#include "c/memory.h"
+
+#define SCREEN_START    VGA_TEXT
+#define SCREEN_SIZE     VGA_TEXT_SIZE
+#define SCREEN_END      VGA_TEXT_END
+#define SCREEN_COLUMNS  160
+#define SCREEN_LINES    24
+
 typedef enum
 {
     BLACK = 0,
