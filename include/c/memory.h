@@ -11,9 +11,9 @@ extern "C" {
  * Units
  */
 
-#define KILOBYTE        1024
-#define MEGABYTE        (1024 * KILOBYTE)
-#define GIGABYTE        (1024 * MEGABYTE)
+#define KILOBYTE            1024
+#define MEGABYTE            (1024 * KILOBYTE)
+#define GIGABYTE            (1024 * MEGABYTE)
 
 /*
  * Setup
@@ -40,10 +40,10 @@ extern "C" {
  * Constant addresses
  */
 
-#define VGA_MEM         0xa0000
-#define VGA_TEXT        0xb8000
-#define VGA_TEXT_SIZE   0xfa0
-#define VGA_TEXT_END    VGA_TEXT+VGA_TEXT_SIZE
+#define VGA_MEM             0xa0000
+#define VGA_TEXT            0xb8000
+#define VGA_TEXT_SIZE       0xfa0
+#define VGA_TEXT_END        VGA_TEXT+VGA_TEXT_SIZE
 
 /*
  * Hardware informations
@@ -52,18 +52,14 @@ extern "C" {
 
 #define SYSTEM_VALUE(type, padd) (*((type*)(PURE64_SYSTEM_VARIABLES + (padd))))
 
-#define CPU_SPEED               SYSTEM_VALUE(uint16_t, 0x10)
-#define ACTIVE_CPU_CORES        SYSTEM_VALUE(uint16_t, 0x12)
-#define DETECTED_CPU_CORES      SYSTEM_VALUE(uint16_t, 0x14)
-#define AVAILABLE_MEMORY        SYSTEM_VALUE(uint32_t, 0x20)
+#define CPU_SPEED           SYSTEM_VALUE(uint16_t, 0x10)
+#define ACTIVE_CPU_CORES    SYSTEM_VALUE(uint16_t, 0x12)
+#define DETECTED_CPU_CORES  SYSTEM_VALUE(uint16_t, 0x14)
+#define AVAILABLE_MEMORY    SYSTEM_VALUE(uint32_t, 0x20)
 
-#define STACKBASE       0x400000                /* Stack is at the end of the first page */
-#define STACKSIZE       (MEGABYTE)              /* 512KiB stack */
-#define STACKLIMIT      STACKBASE - STACKSIZE
-
-#define HEAPBASE        0x200000
-#define HEAPSIZE        (MEGABYTE)
-#define HEAPLIMIT       HEAPBASE + HEAPSIZE
+#define HEAPBASE            0x200000
+#define HEAPSIZE            (MEGABYTE)
+#define HEAPLIMIT           HEAPBASE + HEAPSIZE
 
 #define relocate_stack(base)        \
 do {                                \
