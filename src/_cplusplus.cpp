@@ -21,7 +21,6 @@ int __cxa_atexit(void (*destructor) (void *), void *arg, void *dso)
 
 }
 
-
 void*           operator new(size_t)
 {
     return (void*)0;

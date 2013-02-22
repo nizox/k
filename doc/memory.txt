@@ -1,0 +1,30 @@
+For the moment, the kernel uses the segmentation and the pagination
+set by Pure64.i Pagination in this configuration provides memory pages
+of 2MiB size and an identity-mapping strategy.
+
+Therefore, still for the moment, the kernel uses all the available memory 
+space set by the bootloader.
+
+Then, it follows the following mapping for memory areas:
+
++-------------------------------------------------+   0x0
+| Pure64 data with tables and various information |
++-------------------------------------------------+   0x100000
+| Kernel code and data                            |
++-------------------------------------------------+   0x400000
+|                                                 |
+
+| Kernel heap                                     |
+
+|                                                 |
+V                                                 V
+
+            .......................
+
+^                                                 ^
+|                                                 |
+
+| Kernel stack                                    |
+
+|                                                 |
++-------------------------------------------------+   physical memory limit

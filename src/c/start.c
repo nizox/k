@@ -3,16 +3,20 @@
 
 void    _cppstart();
 
-/*
- * Trick made because for an unknown reason, the bootloader
- * is unable to jump to an unmangled C++ function.
- * Used to commit stack relocation anyway.
- */
-void _start()
+static void
+_main()
+{
+    /*init_kernek_heap(TO_KILOBYTES(AVAILABLE_MEMORY  MEGABYTES));*/
+    _cppstart();
+}
+
+void 
+_start()
 {
     /*
-     * Relocate the stack at the end of the last page inside the available memory.
+     * Relocate the stack at the end of the last page inside the available memory
+     * and jump to the main function to clear stack context.
      */
-    relocate_stack(AVAILABLE_MEMORY * MEGABYTE);
-    _cppstart();
+    relocate_stack(AVAILABLE_MEMORY  MEGABYTES);
+    _main();
 }

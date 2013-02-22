@@ -1,11 +1,16 @@
-#ifndef KERNEL_MEMORY_H_
-#define KERNEL_MEMORY_H_
+#ifndef KERNEL_C_MEMORY_H_
+#define KERNEL_C_MEMORY_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include "kernel.h"
 #include "c/types.h"
+
+__C_BEGIN
+
+/*
+ * C language tools
+ */
+
+#define NULL (void *)0
 
 /*
  * Units
@@ -14,6 +19,14 @@ extern "C" {
 #define KILOBYTE            1024
 #define MEGABYTE            (1024 * KILOBYTE)
 #define GIGABYTE            (1024 * MEGABYTE)
+
+#define KILOBYTES           * KILOBYTE
+#define MEGABYTES           * MEGABYTE
+#define GIGABYTES           * GIGABYTE
+
+#define TO_KILOBYTES(bytes)  ((bytes) / KILOBYTE)
+#define TO_MEGABYTES(bytes)  ((bytes) / MEGABYTE)
+#define TO_GIGABYTES(bytes)  ((bytes) / GIGABYTE)
 
 /*
  * Setup
@@ -37,6 +50,18 @@ extern "C" {
 #define PURE64_PD_SIZE      ((256 * KILOBYTE) / 8)
 
 /*
+ * Hardware informations
+ */
+#define PURE64_SYSTEM_VARIABLES 0x5000
+
+#define SYSTEM_VALUE(type, padd) (*((type*)(PURE64_SYSTEM_VARIABLES + (padd))))
+
+#define CPU_SPEED           SYSTEM_VALUE(uint16_t, 0x10)
+#define ACTIVEPUORES    SYSTEM_VALUE(uint16_t, 0x12)
+#define DETECTEDPUORES  SYSTEM_VALUE(uint16_t, 0x14)
+#define AVAILABLE_MEMORY    SYSTEM_VALUE(uint32_t, 0x20)
+
+/*
  * Constant addresses
  */
 
@@ -45,21 +70,13 @@ extern "C" {
 #define VGA_TEXT_SIZE       0xfa0
 #define VGA_TEXT_END        VGA_TEXT+VGA_TEXT_SIZE
 
-/*
- * Hardware informations
- */
-#define PURE64_SYSTEM_VARIABLES 0x5000
-
-#define SYSTEM_VALUE(type, padd) (*((type*)(PURE64_SYSTEM_VARIABLES + (padd))))
-
-#define CPU_SPEED           SYSTEM_VALUE(uint16_t, 0x10)
-#define ACTIVE_CPU_CORES    SYSTEM_VALUE(uint16_t, 0x12)
-#define DETECTED_CPU_CORES  SYSTEM_VALUE(uint16_t, 0x14)
-#define AVAILABLE_MEMORY    SYSTEM_VALUE(uint32_t, 0x20)
-
 #define HEAPBASE            0x200000
-#define HEAPSIZE            (MEGABYTE)
+#define HEAPSIZE            (4 * MEGABYTE)
 #define HEAPLIMIT           HEAPBASE + HEAPSIZE
+
+/*
+ * Stack tools
+ */
 
 #define relocate_stack(base)        \
 do {                                \
@@ -70,8 +87,6 @@ do {                                \
           );                        \
 } while (0)
 
-#ifdef __cplusplus
-}
-#endif
+__C_END
 
-#endif /* end of include guard: KERNEL_MEMORY_H_ */
+#endif /* end of include guard: KERNEL_C_MEMORY_H_ */

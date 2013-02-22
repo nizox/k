@@ -1,11 +1,10 @@
-#ifndef KERNEL_SCREEN_H_
-#define KERNEL_SCREEN_H_
+#ifndef KERNEL_C_SCREEN_H_
+#define KERNEL_C_SCREEN_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include "kernel.h"
 #include "c/memory.h"
+
+__C_BEGIN
 
 #define SCREEN_START    VGA_TEXT
 #define SCREEN_SIZE     VGA_TEXT_SIZE
@@ -46,8 +45,6 @@ void        set_fg_color(EGA_COLORS color);
 void        screen_init(EGA_COLORS bg, EGA_COLORS fg);
 void        screen_init_default(void);
 
-#ifdef __cplusplus
-}
-#endif
+__C_END
 
-#endif /* end of include guard: KERNEL_SCREEN_H_ */
+#endif /* end of include guard: KERNEL_C_SCREEN_H_ */

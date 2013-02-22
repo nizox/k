@@ -16,28 +16,33 @@ video::attribute::attribute(const attribute& src)
 video::attribute::~attribute()
 {}
 
-void                video::attribute::set(colors fg, colors bg)
+void
+video::attribute::set(colors fg, colors bg)
 {
     this->set_fg(fg);
     this->set_bg(bg);
 }
 
-void                video::attribute::set_fg(colors fg)
+void
+video::attribute::set_fg(colors fg)
 {
     fg_ = fg;
 }
 
-void                video::attribute::set_bg(colors bg)
+void
+video::attribute::set_bg(colors bg)
 {
     bg_ = bg;
 }
 
-video::colors       video::attribute::get_fg() const
+video::colors
+video::attribute::get_fg() const
 {
     return fg_;
 }
 
-video::colors       video::attribute::get_bg() const
+video::colors
+video::attribute::get_bg() const
 {
     return bg_;
 }

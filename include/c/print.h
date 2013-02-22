@@ -1,9 +1,9 @@
-#ifndef KERNEL_PRINT_H
-#define KERNEL_PRINT_H
+#ifndef KERNEL_C_PRINT_H
+#define KERNEL_C_PRINT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "kernel.h"
+
+__C_BEGIN
 
 #include <stdarg.h>
 
@@ -13,8 +13,6 @@ void                puts(const char *string);
 void                vprintk(const char *fmt, va_list ap);
 void                printk(const char *fmt, ...);
 
-#ifdef __cplusplus
-}
-#endif
+__C_END
 
-#endif /* end of include guard: KERNEL_PRINT_H */
+#endif /* end of include guard: KERNEL_C_PRINT_H */
