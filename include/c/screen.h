@@ -1,7 +1,7 @@
 #ifndef KERNEL_C_SCREEN_H_
 #define KERNEL_C_SCREEN_H_
 
-#include "kernel.h"
+#include "c/kernel.h"
 #include "c/memory.h"
 
 __C_BEGIN

@@ -6,13 +6,15 @@
 
 void                vprintk(const char *fmt, va_list ap)
 {
-    char            buf[34];
+    char            buf[66];
     char            *str;
+    int             flags;
 
     for (; *fmt; ++fmt)
       {
         if (*fmt == '%')
           {
+            flags = 0;
             switch (*(++fmt))
               {
                 case 'c':
@@ -23,17 +25,20 @@ void                vprintk(const char *fmt, va_list ap)
                     break;
                 case 'i':
                 case 'd':
-                    print(itoa((int)va_arg(ap, int), buf, 10));
+                    flags |= SIGN;
+                case 'u':
+                    print(number((int)va_arg(ap, uintptr_t), buf, 10, flags));
                     break;
-                case 'p':
                 case 'x':
-                    print(itoa((int)va_arg(ap, int), buf, 16));
+                    flags |= SIGN;
+                case 'p':
+                    print(number((int)va_arg(ap, uintptr_t), buf, 16, PREFIX | SMALL | flags));
                     break;
                 case 'o':
-                    print(itoa((int)va_arg(ap, int), buf, 8));
+                    print(number((int)va_arg(ap, uintptr_t), buf, 8, PREFIX | SMALL));
                     break;
                 case 'b':
-                    print(itoa((int)va_arg(ap, int), buf, 2));
+                    print(number((int)va_arg(ap, uintptr_t), buf, 2, 0));
                     break;
                 case '%':
                     putchar(*fmt);

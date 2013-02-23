@@ -1,7 +1,7 @@
 #ifndef KERNEL_C_MEMORY_H_
 #define KERNEL_C_MEMORY_H_
 
-#include "kernel.h"
+#include "c/kernel.h"
 #include "c/types.h"
 
 __C_BEGIN

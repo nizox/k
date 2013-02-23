@@ -41,7 +41,7 @@ struct __attribute__((packed)) base_entry
 
     void                set_bit(size_t number, bool flag)
       {
-        raw ^= (-flag ^ raw) & (1 << number);
+        COND_SET_BIT(raw, flag, 1 << number);
       }
 
     uint64_t*           base_addr() const

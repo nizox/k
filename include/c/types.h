@@ -1,7 +1,7 @@
 #ifndef KERNEL_C_TYPES_H_
 #define KERNEL_C_TYPES_H_
 
-#include "kernel.h"
+#include "c/kernel.h"
 
 __C_BEGIN
 

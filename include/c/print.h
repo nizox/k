@@ -1,7 +1,7 @@
 #ifndef KERNEL_C_PRINT_H
 #define KERNEL_C_PRINT_H
 
-#include "kernel.h"
+#include "c/kernel.h"
 
 __C_BEGIN
 

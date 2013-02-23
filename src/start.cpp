@@ -1,13 +1,8 @@
 #include "isr.h"
 #include "video.h"
-#include "std.h"
 #include "kheap.h"
-#include "memory.h"
 
-#include "c/print.h"
-#include "c/screen.h"
-#include "c/types.h"
-#include "c/memory.h"
+#include "c/string.h"
 
 /*
  * This is the entry point of the kernel
@@ -18,6 +13,8 @@ void
 _cppstart(void)
 {
     video               screen;
+    char                buf[34];
+
     memory::info        info(AVAILABLE_MEMORY MEGABYTES, 2 MEGABYTES, memory::pml4, memory::pdp, memory::pd);
 
     screen << "Initializing kernel heap ..." << std::endl;
