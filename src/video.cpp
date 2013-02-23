@@ -105,13 +105,20 @@ video::operator<<(int number)
 video&
 video::operator<<(unsigned int number)
 {
-    return this->operator<<(static_cast<int>(number));
+    return this->operator<<(static_cast<uintptr_t>(number));
+}
+
+video&
+video::operator<<(uintptr_t number)
+{
+    ::printk("%u\n", number);
+    return *this;
 }
 
 video&
 video::operator<<(const void* ptr)
 {
-    ::printk("%x", ptr);
+    ::printk("%p", ptr);
     return *this;
 }
 

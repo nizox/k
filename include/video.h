@@ -4,6 +4,8 @@
 #include "std.h"
 #include "ostream.h"
 
+#include "c/types.h"
+
 class video: public std::ostream
 {
 public:
@@ -70,6 +72,7 @@ public:
     virtual video&      operator<<(char c);
     virtual video&      operator<<(int number);
     virtual video&      operator<<(unsigned int number);
+    virtual video&      operator<<(uintptr_t number);
     virtual video&      operator<<(const void* ptr);
     virtual video&      operator<<(std::termination);
     video&              operator<<(const attribute& attr);
