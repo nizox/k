@@ -18,8 +18,9 @@ public:
     uintptr_t*          get() const;
     bool                set(intptr_t inc);
 
-    size_t              size() const;
-    size_t              limit() const;
+    uintptr_t           size() const;                   // in bytes
+    uintptr_t           limit() const;                  // in bytes
+    uintptr_t*          end() const { return end_; }
 
     bool                ok() const;
 
@@ -28,8 +29,8 @@ private:
     uintptr_t*          start_;
     uintptr_t*          end_;
 
-    size_t              size_;
-    size_t              limit_;
+    uintptr_t           size_;
+    uintptr_t           limit_;
 
     const memory::info& meminfo_;
 

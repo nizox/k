@@ -13,7 +13,6 @@ void
 _cppstart(void)
 {
     video               screen;
-    char                buf[34];
 
     memory::info        info(AVAILABLE_MEMORY MEGABYTES, 2 MEGABYTES, memory::pml4, memory::pdp, memory::pd);
 
@@ -23,6 +22,7 @@ _cppstart(void)
       {
         screen << "Heap start address: " << brk.get() << "" << std::endl;
         screen << "Heap limit: " << (int)TO_MEGABYTES(brk.limit()) << " Mib" << std::endl;
+        screen.printf("Heap end: %p\n", brk.end());
       }
     else
         goto loop;
