@@ -29,7 +29,6 @@ private:
     uintptr_t*          start_;
     uintptr_t*          end_;
 
-    uintptr_t           size_;
     uintptr_t           limit_;
 
     const memory::info& meminfo_;

@@ -9,7 +9,7 @@ namespace kheap
 {
 
 brk::brk(const memory::info& meminfo)
-    : brk_(0), size_(0), meminfo_(meminfo), ok_(false)
+    : brk_(0), meminfo_(meminfo), ok_(false)
 {
     video::attribute    error(video::red, video::black);
     video               screen;
@@ -50,10 +50,10 @@ brk::set(intptr_t inc)
 {
     uintptr_t*  save = brk_;
 
-    brk_ += inc;
+    brk_ = (uintptr_t*)((uintptr_t)brk_ + inc);
     if (brk_ < start_ || brk_ > end_) {
-        brk_ = save;
-        return false;
+          brk_ = save;
+          return false;
     }
 
     return true;
@@ -61,7 +61,7 @@ brk::set(intptr_t inc)
 
 uintptr_t
 brk::size() const
-{ return size_; }
+{ return (uintptr_t)brk_ - (uintptr_t)start_; }
 
 uintptr_t
 brk::limit() const
