@@ -5,38 +5,35 @@ static const char       digits[16] = "0123456789ABCDEF";
 char*
 number(uintptr_t num, char *buf, int base, uint8_t flags)
 {
-    char                *save = buf;
     ssize_t             i = 0;
     char                locase = (flags & SMALL);
-    char                tmp[66];
     uint8_t             isneg = (intptr_t)num < 0 && (flags & SIGN) != 0;
 
     if (num == 0)
-        tmp[i++] = '0';
+        buf[i++] = '0';
     else
       {
         COND_SET_BIT(flags, isneg, SIGN);
         COND_NEGATE(isneg, num);
         while (num)
           {
-            tmp[i++] = digits[num % base] | locase;
+            buf[i++] = digits[num % base] | locase;
             num /= base;
           }
         if (flags & PREFIX && (base & (8 | 16)))
           {
             if (base & 16)
-                tmp[i++] = 'X' | locase;
-            tmp[i++] = '0';
+                buf[i++] = 'X' | locase;
+            buf[i++] = '0';
           }
         if (flags & SIGN)
-            tmp[i++] = '-';
+            buf[i++] = '-';
       }
 
-    while (i > 0)
-        *(buf++) = tmp[--i];
-    *(buf) = 0;
+    buf[i] = 0;
+    strrev(buf, buf + i - 1);
 
-    return save;
+    return buf;
 }
 
 char*
@@ -186,4 +183,14 @@ strncat(char *dest, const char *src, size_t n)
       }
     dest[i] = 0;
     return dest;
+}
+
+char*
+strrev(char *begin, char *end)
+{
+    char    *save = begin;
+
+    for (; begin < end; ++begin, --end)
+        XOR_SWAP(*begin, *end);
+    return save;
 }
