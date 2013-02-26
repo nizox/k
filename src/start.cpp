@@ -22,7 +22,6 @@ _cppstart(void)
       {
         screen << "Heap start address: " << brk.get() << "" << std::endl;
         screen << "Heap limit: " << (int)TO_MEGABYTES(brk.limit()) << " Mib" << std::endl;
-        screen.printf("Heap end: %p\n", brk.end());
       }
     else
         goto loop;

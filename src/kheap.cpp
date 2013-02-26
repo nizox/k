@@ -34,23 +34,19 @@ brk::brk(const memory::info& meminfo)
         start_ = meminfo_.pd[i].base_addr();
         brk_ = start_;
         limit_ = ((pages - i) / 2) * (meminfo.page_size);   // Kernel heap is half the available cleared memory
-        end_ = (uintptr_t *)((uintptr_t)start_ + limit_);   // Double cast needed to get proper pointer values
+        end_ = (uintmax_t *)((uintmax_t)start_ + limit_);   // Double cast needed to get proper pointer values
       }
 }
 
 brk::~brk()
 {}
 
-uintptr_t*
-brk::get() const
-{ return brk_; }
-
 bool
 brk::set(intptr_t inc)
 {
     uintptr_t*  save = brk_;
 
-    brk_ = (uintptr_t*)((uintptr_t)brk_ + inc);
+    brk_ = (uintmax_t*)((uintmax_t)brk_ + inc);
     if (brk_ < start_ || brk_ > end_) {
           brk_ = save;
           return false;
@@ -59,13 +55,25 @@ brk::set(intptr_t inc)
     return true;
 }
 
-uintptr_t
+void*
+brk::get() const
+{ return static_cast<void*>(brk_); }
+
+void*
+brk::start() const
+{ return start_; }
+
+void*
+brk::end() const
+{ return end_; }
+
+size_t
 brk::size() const
-{ return (uintptr_t)brk_ - (uintptr_t)start_; }
+{ return (size_t)(uintptr_t)brk_ - (uintptr_t)start_; }
 
 uintptr_t
 brk::limit() const
-{ return limit_; }
+{ return (uintptr_t)limit_; }
 
 bool
 brk::ok() const

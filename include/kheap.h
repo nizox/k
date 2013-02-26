@@ -15,19 +15,20 @@ public:
     brk(const memory::info& meminfo);
     ~brk();
 
-    uintptr_t*          get() const;
     bool                set(intptr_t inc);
+    void*               get() const;
+    void*               start() const;
+    void*               end() const;
 
-    uintptr_t           size() const;                   // in bytes
+    size_t              size() const;                   // in bytes
     uintptr_t           limit() const;                  // in bytes
-    uintptr_t*          end() const { return end_; }
 
     bool                ok() const;
 
 private:
-    uintptr_t*          brk_;
-    uintptr_t*          start_;
-    uintptr_t*          end_;
+    uintmax_t*          brk_;
+    uintmax_t*          start_;
+    uintmax_t*          end_;
 
     uintptr_t           limit_;
 
