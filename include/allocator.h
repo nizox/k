@@ -10,7 +10,6 @@
 
 #include "video.h"
 
-//
 // Simple allocator based on the Doug Lea's malloc architecture.
 //
 // +-----------------------------------------------------------+
@@ -22,7 +21,7 @@
 // depends on ``small_chunk_size''.
 //
 // LARGE_CHUNKS is, for the moment, implemented as a sigle linked
-// list and keeps a track of chunks larger thant ``small_chunk_size''.
+// list and keeps a track of chunks larger than ``small_chunk_size''.
 // A better implementation (heap, rbt, b-tree etc.) is possible
 // in the future.
 //
@@ -34,7 +33,6 @@
 // use of the given heap (in that case: the kernel heap). No external
 // call to the heap should be made.
 //
-// TODO: test the allocator
 // TODO: check and mark if the pointer is already free in allocator::free
 // TODO: implement a better large chunks management (optional)
 // TODO: implement merge and split (optional)
@@ -137,6 +135,15 @@ private:
     chunk*              trim_wide_chunk(size_t size);
     size_t              page_number(size_t size);
 
+};
+
+class global_allocator
+{
+public:
+    static void         set_allocator(allocator* alc);
+    static allocator*   get_allocator();
+private:
+    static allocator*   alc_;
 };
 
 #endif /* end of include guard: KERNEL_ALLOCATOR_H_ */

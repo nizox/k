@@ -9,7 +9,7 @@
 
 allocator::allocator(kheap::brk& brk)
     : brk_(brk), wide_chunk_(0)
-{ }
+{}
 
 allocator::~allocator()
 {}
@@ -247,4 +247,22 @@ allocator::large_chunks::pop(size_t size)
         chk = chk->next;
       }
     return 0;
+}
+
+//
+// global_allocator class
+//
+
+allocator*      global_allocator::alc_ = 0;
+
+void
+global_allocator::set_allocator(allocator* alc)
+{
+    alc_ = alc;
+}
+
+allocator*
+global_allocator::get_allocator()
+{
+    return alc_;
 }

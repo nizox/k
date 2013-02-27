@@ -5,6 +5,21 @@
 
 #include "c/string.h"
 
+struct test
+{
+    test() {
+          video screen;
+          screen << "TEEEEEEST" << std::endl;
+    }
+
+    ~test()
+      {
+        video screen ;
+
+        screen << "I IZ DYING" << std::endl;
+      }
+};
+
 /*
  * This is the entry point of the kernel
  * we must never return from this function
@@ -22,6 +37,7 @@ _cppstart(void)
 
     screen << "Initializing allocator ...";
     allocator           kmemalloc(brk);
+    global_allocator::set_allocator(&kmemalloc);
     screen << " ok" << std::endl;
 
     screen << "Loading IDT ...";
