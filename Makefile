@@ -12,15 +12,15 @@ CSRCS = 	src/c/start.c		\
 			src/c/print.c			\
 			src/c/printk.c
 
-CPPSRCS = 	src/_cplusplus.cpp		\
-			src/exceptions.cpp		\
-			src/isr.cpp		\
-			src/idt.cpp		\
-			src/start.cpp			\
-			src/video.cpp			\
-			src/video_attr.cpp		\
-			src/memory.cpp			\
-			src/kheap.cpp
+CPPSRCS = 	src/_cplusplus.cpp				\
+			src/exceptions.cpp				\
+			src/isr.cpp						\
+			src/idt.cpp						\
+			src/start.cpp					\
+			src/video.cpp					\
+			src/memory.cpp					\
+			src/kheap.cpp					\
+			src/allocator.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 

@@ -18,4 +18,7 @@ do {                                            \
       (value) ^= (-(flag) ^ (value)) & (mask);    \
 } while (0)
 
+/* Check if a number is a power of two */
+#define TWO_POWER(x) ((x) == 1 || !((x) & (x - 1)))
+
 #endif /* end of include guard: KERNEL_C_H_ */
