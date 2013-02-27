@@ -15,13 +15,18 @@ _cppstart(void)
 {
     video               screen;
     memory::info        info(AVAILABLE_MEMORY MEGABYTES, 2 MEGABYTES, memory::pml4, memory::pdp, memory::pd);
-    kheap::brk          brk(info);
-    allocator           kmemalloc(brk);
 
-    screen << "Initializing kernel heap ..." << std::endl;
-    screen << "Loading IDT ..." << std::endl;
+    screen << "Initializing kernel heap ...";
+    kheap::brk          brk(info);
+    screen << " ok" << std::endl;
+
+    screen << "Initializing allocator ...";
+    allocator           kmemalloc(brk);
+    screen << " ok" << std::endl;
+
+    screen << "Loading IDT ...";
     _isr.setup();
-    screen << "IDT Loaded." << std::endl;
+    screen << " ok" << std::endl;
 
     for(;;);
 }

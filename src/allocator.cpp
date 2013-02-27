@@ -137,12 +137,12 @@ allocator::trim_wide_chunk(size_t size)
       {
         chunk*      chk = wide_chunk_;
 
-        if (size - wide_chunk_->size == 0)
+        if (wide_chunk_->size == size)
             wide_chunk_ = 0;
-        else
+        else if (wide_chunk_->size > size)
           {
-            wide_chunk_ += chunk_header_size + size;
-            wide_chunk_->size = size - chk->size;
+            wide_chunk_ = (chunk*)(((uintptr_t)wide_chunk_) + chunk_header_size + size);
+            wide_chunk_->size = chk->size - size;
           }
 
         chk->size = size;
@@ -157,7 +157,7 @@ allocator::page_number(size_t size)
 {
     size_t      page_size = brk_.info().page_size;
 
-    return size / page_size * page_size + (size % page_size ? page_size : 0);
+    return size / page_size * page_size + size % page_size != 0;
 }
 
 //
@@ -196,7 +196,11 @@ allocator::bins::pop(size_t size)
       {
         if (bins_[i] != 0)
           {
+            video screen;
+
             chunk*  chk = bins_[i];
+            screen.printf("index: %d\n", i);
+            screen.printf("chunk: %p\n", chk);
             bins_[i] = chk->next;
             return chk;
           }
