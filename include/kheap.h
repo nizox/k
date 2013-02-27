@@ -25,10 +25,12 @@ public:
 
     bool                ok() const;
 
+    const memory::info& info() const;
+
 private:
-    uintmax_t*          brk_;
-    uintmax_t*          start_;
-    uintmax_t*          end_;
+    uintptr_t           brk_;
+    uintptr_t           start_;
+    uintptr_t           end_;
 
     uintptr_t           limit_;
 
