@@ -5,21 +5,6 @@
 
 #include "c/string.h"
 
-struct test
-{
-    test() {
-          video screen;
-          screen << "TEEEEEEST" << std::endl;
-    }
-
-    ~test()
-      {
-        video screen ;
-
-        screen << "I IZ DYING" << std::endl;
-      }
-};
-
 /*
  * This is the entry point of the kernel
  * we must never return from this function
