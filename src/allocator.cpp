@@ -157,7 +157,7 @@ allocator::page_number(size_t size)
 {
     size_t      page_size = brk_.info().page_size;
 
-    return size / page_size * page_size + size % page_size != 0;
+    return size / page_size * page_size + (size % page_size != 0);
 }
 
 //
