@@ -21,7 +21,9 @@ CPPSRCS = 	src/_cplusplus.cpp				\
 			src/memory.cpp					\
 			src/kheap.cpp					\
 			src/allocator.cpp				\
-			src/cpu.cpp
+			src/cpu.cpp					\
+			src/apic.cpp					\
+			src/ioapic.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 

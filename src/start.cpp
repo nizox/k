@@ -2,6 +2,8 @@
 #include "video.h"
 #include "kheap.h"
 #include "allocator.h"
+#include "cpu.h"
+#include "ioapic.h"
 
 #include "c/string.h"
 
@@ -29,5 +31,11 @@ _cppstart(void)
     _isr.setup();
     screen << " ok" << std::endl;
 
+    cpu                 cpu;
+    ioapic              ioapic((ioapic::register_t *) IOAPIC_ADDR);
+
+    cpu.setup();
+    ioapic.set_default_cpu(&cpu);
+    ioapic.setup();
     for(;;);
 }

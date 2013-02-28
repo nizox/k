@@ -2,6 +2,7 @@
 #define CPU_H
 
 #include "c/types.h"
+#include "apic.h"
 
 class cpuid_response
 {
@@ -33,6 +34,9 @@ class cpu_features: public cpuid_response
 class cpu
 {
   public:
+    cpu();
+    ~cpu();
+
     uint64_t get_rflags(void);
     /*
      * As we have no dynamic memory allocation yet, these functions cannot be
@@ -40,6 +44,9 @@ class cpu
      */
     char const * get_vendor_id(void);
     cpu_features & get_features(void);
+
+    local_apic & get_local_apic();
+    void setup();
 
   protected:
     enum cpuid_request_type
@@ -54,6 +61,7 @@ class cpu
 
   private:
     cpuid_response tmp;
+    local_apic lapic;
 };
 
 #endif

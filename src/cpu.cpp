@@ -1,5 +1,13 @@
 #include "cpu.h"
 
+cpu::cpu(): lapic((local_apic::register_t *) LOCAL_APIC_ADDR)
+{
+}
+
+cpu::~cpu()
+{
+}
+
 bool
 cpu_features::has_msr(void)
 {
@@ -50,4 +58,17 @@ cpu::cpuid_request(cpuid_response & r, cpu::cpuid_request_type req)
         "=c"(r.value.reg.ecx), "=d"(r.value.reg.edx) : "a"(req)
     );
     return r;
+}
+
+local_apic &
+cpu::get_local_apic()
+{
+    return lapic;
+}
+
+void
+cpu::setup()
+{
+    lapic.setup();
+    lapic.enable();
 }

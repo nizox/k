@@ -61,6 +61,9 @@ __C_BEGIN
 #define DETECTEDPUORES  SYSTEM_VALUE(uint16_t, 0x14)
 #define AVAILABLE_MEMORY    SYSTEM_VALUE(uint32_t, 0x20)
 
+#define LOCAL_APIC_ADDR      SYSTEM_VALUE(uint64_t, 0xA00 + 0x28)
+#define IOAPIC_ADDR      SYSTEM_VALUE(uint64_t, 0xA00 + 0x30)
+
 /*
  * Constant addresses
  */
