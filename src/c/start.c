@@ -3,14 +3,7 @@
 
 void    _cppstart();
 
-static void
-_main()
-{
-    /*init_kernek_heap(TO_KILOBYTES(AVAILABLE_MEMORY  MEGABYTES));*/
-    _cppstart();
-}
-
-void 
+void
 _start()
 {
     /*
@@ -18,5 +11,5 @@ _start()
      * and jump to the main function to clear stack context.
      */
     relocate_stack(AVAILABLE_MEMORY  MEGABYTES);
-    _main();
+    _cppstart();
 }

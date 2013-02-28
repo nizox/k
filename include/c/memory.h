@@ -83,7 +83,7 @@ do {                                \
       asm(                          \
           "mov %0, %%rax \n"        \
           "mov %%rax, %%rsp \n"     \
-          :: "g"(base)              \
+          :: "g"((uint64_t)base)    \
           );                        \
 } while (0)
 
