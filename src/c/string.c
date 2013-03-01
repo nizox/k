@@ -108,6 +108,18 @@ memset(void *s, int c, size_t n)
 }
 
 void*
+memmove(void *dest, const void *src, size_t n)
+{
+    char            *cdest = (char *)dest;
+    const char      *csrc = (char *)src;
+
+    for (; n; --n, ++cdest, ++csrc)
+        *cdest = *csrc;
+
+    return dest;
+}
+
+void*
 memcpy(void *dest, const void *src, size_t n)
 {
     char            *cdest = (char *)dest;
@@ -193,4 +205,78 @@ strrev(char *begin, char *end)
     for (; begin < end; ++begin, --end)
         XOR_SWAP(*begin, *end);
     return save;
+}
+
+int
+memcmp(const void *m1, const void *m2, size_t n)
+{
+    char const *ptrm1 = m1;
+    char const *ptrm2 = m2;
+
+    for (;*ptrm1 == *ptrm2; --n, ++ptrm1, ++ptrm2)
+    {
+        if (n == 0)
+            return 1;
+    }
+    return 0;
+}
+
+char *
+strchr(const char *s, int c)
+{
+    char const *it = s;
+
+    for (;*it != '\0'; ++it)
+    {
+        if (*it == c)
+            return it;
+    }
+    return 0;
+}
+
+int
+strcmp(const char *s1, const char *s2)
+{
+    char const *it;
+
+    for (it = s1; *it != '\0'; ++s1, ++s2)
+    {
+        if (*s1 != *s2)
+            return *s1 - *s2;
+    }
+    return 0;
+}
+
+char *
+strpbrk(const char *s1, const char *s2)
+{
+    const char *scanp;
+    int c;
+    int sc;
+
+    while ((c = *s1++) != 0) {
+        for (scanp = s2; (sc = *scanp++) != 0;)
+            if (sc == c)
+                return (char *)(s1 - 1);
+    }
+    return 0;
+}
+
+int
+floor(float x)
+{
+    if (x >= 0)
+    {
+        return (int)x;
+    }
+    else
+    {
+        int y = (int)x;
+        return ((float)y == x) ? y : y - 1;
+    }
+}
+
+double
+pow(double x, double y)
+{
 }

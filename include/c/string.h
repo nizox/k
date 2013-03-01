@@ -26,11 +26,18 @@ long int strtol(const char *ptr, char **endptr, int base);
 size_t strlen(const char *str);
 void* memset(void *s, int c, size_t n);
 void* memcpy(void *dest, const void *src, size_t n);
+void* memmove(void *dest, const void *src, size_t n);
 char* strcpy(char *dest, const char *src);
 char* strncpy(char *dest, const char *src, size_t n);
 char* strcat(char *dest, const char *src);
 char* strncat(char *dest, const char *src, size_t n);
 char* strrev(char *begin, char *end);
+int memcmp(const void *m1, const void *m2, size_t n);
+char *strchr(const char *s, int c);
+int strcmp(const char *s1, const char *s2);
+char *strpbrk(const char *s, const char *accept);
+int floor(float x);
+double pow(double x, double y);
 
 __C_END
 
