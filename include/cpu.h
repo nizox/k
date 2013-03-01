@@ -46,7 +46,10 @@ class cpu
     cpu_features & get_features(void);
 
     local_apic & get_local_apic();
+
     void setup();
+    void enable_interrupts();
+    void disable_interrupts();
 
   protected:
     enum cpuid_request_type

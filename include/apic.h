@@ -38,9 +38,14 @@ class local_apic
 
     };
 
-    local_apic(register_t * base_addr);
+    local_apic(register_t * base_addr = (register_t *) LOCAL_APIC_ADDR);
     ~local_apic();
 
+    int get_id();
+    void setup();
+    void enable();
+
+  private:
     /* We must avoid pointer arythmetic here */
     inline register_t get(register_index_t index) const
     {
@@ -62,10 +67,7 @@ class local_apic
         *(base_register_addr + index / sizeof(*base_register_addr)) &= ~mask;
     }
 
-   void setup();
-   void enable();
 
-  private:
     register_t * base_register_addr;
 };
 

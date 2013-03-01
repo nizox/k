@@ -10,13 +10,19 @@ local_apic::~local_apic()
 {
 }
 
+int
+local_apic::get_id()
+{
+    return get(local_apic::id) >> 24;
+}
+
 void
 local_apic::setup()
 {
     /* Set destination format to flat mode */
     set_bit(local_apic::destination_format, 0xF << 28);
     /* Set logical destination to 1 so all CPU are in the same group */
-    set_bit(local_apic::logical_destination, 0x1 << 24);
+    //set_bit(local_apic::logical_destination, 0x1 << 24);
     /* Clear the task priority */
     set(local_apic::task_priority, 0x0);
 }

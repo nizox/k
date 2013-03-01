@@ -1,6 +1,6 @@
 #include "cpu.h"
 
-cpu::cpu(): lapic((local_apic::register_t *) LOCAL_APIC_ADDR)
+cpu::cpu()
 {
 }
 
@@ -69,6 +69,20 @@ cpu::get_local_apic()
 void
 cpu::setup()
 {
+    disable_interrupts();
     lapic.setup();
     lapic.enable();
+    enable_interrupts();
+}
+
+void
+cpu::enable_interrupts()
+{
+    __asm__ ("sti");
+}
+
+void
+cpu::disable_interrupts()
+{
+    __asm__ ("cli");
 }

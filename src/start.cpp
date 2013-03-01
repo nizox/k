@@ -16,6 +16,28 @@ void
 _cppstart(void)
 {
     video               screen;
+    cpu                 cpu;
+    ioapic              ioapic(cpu);
+
+    /* Interrupts are disabled by the bootloader but we want it to be clear */
+    cpu.disable_interrupts();
+
+    screen << "Initializing IDT ...";
+    _isr.setup();
+    screen << " ok" << std::endl;
+
+    screen << "Initializing CPU ...";
+    cpu.setup();
+    screen << " ok" << std::endl;
+
+    screen << "Initializing IOAPIC ...";
+    ioapic.setup();
+    screen << " ok" << std::endl;
+
+    cpu.enable_interrupts();
+
+    //screen << cpu.get_local_apic().get_id() << std::endl;
+
     memory::info        info(AVAILABLE_MEMORY MEGABYTES, 2 MEGABYTES, memory::pml4, memory::pdp, memory::pd);
 
     screen << "Initializing kernel heap ...";
@@ -27,15 +49,5 @@ _cppstart(void)
     global_allocator::set_allocator(&kmemalloc);
     screen << " ok" << std::endl;
 
-    screen << "Loading IDT ...";
-    _isr.setup();
-    screen << " ok" << std::endl;
-
-    cpu                 cpu;
-    ioapic              ioapic((ioapic::register_t *) IOAPIC_ADDR);
-
-    cpu.setup();
-    ioapic.set_default_cpu(&cpu);
-    ioapic.setup();
     for(;;);
 }
