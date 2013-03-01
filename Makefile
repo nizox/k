@@ -2,7 +2,8 @@ NASM = nasm
 CC = clang
 CXX = clang++
 CFLAGS = -g -m64 -W -nostdlib -fno-builtin -fno-stack-protector -mno-red-zone
-CFLAGS += -Iinclude
+CFLAGS += -Iinclude -Isub/
+CFLAGS += -DLUA_ANSI
 CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti -std=c++11
 BUILD = build
 
@@ -22,6 +23,10 @@ CPPSRCS = 	src/_cplusplus.cpp				\
 			src/kheap.cpp					\
 			src/allocator.cpp
 
+LUA_PATH	=	sub/lua
+
+LIB_LUA		=	build/obj/libluacore.a
+
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 
 # The system image must be a valid disk so we compute a valid size
@@ -33,12 +38,20 @@ SECTORS = $(shell echo "${CYLINDERS} * ${HEADS} * ${SPT}" | bc)
 
 all: ${BUILD}/system
 
+CORE_O=	sub/lua/lapi.o sub/lua/lcode.o sub/lua/lctype.o sub/lua/ldebug.o \
+		sub/lua/ldo.o sub/lua/ldump.o sub/lua/lfunc.o sub/lua/lgc.o sub/lua/llex.o \
+		sub/lua/lmem.o sub/lua/lobject.o sub/lua/lopcodes.o sub/lua/lparser.o sub/lua/lstate.o \
+		sub/lua/lstring.o sub/lua/ltable.o sub/lua/ltm.o sub/lua/lundump.o sub/lua/lvm.o \
+		sub/lua/lzio.o
+
 
 ${BUILD}:
 	mkdir -p $@
 	mkdir -p $@/obj/src/c
 	cp util/bochsrc $@/bochsrc
 
+${LIB_LUA}: ${CORE_O} sub/lua/libluacore.a
+	cp ${LUA_PATH}/libluacore.a ${LIB_LUA}
 
 ${BUILD}/mbr: ${BUILD} sub/bootloader/src/bootsectors/bmfs_mbr.asm
 	# build the MBR boot sector
@@ -66,13 +79,12 @@ ${BUILD}/obj/%.o: %.c
 ${BUILD}/obj/%.o: %.cpp
 	${CXX} ${CXXFLAGS} -c -o $@ $<
 
-
-${BUILD}/kernel: util/linker.ld ${BUILD} ${OBJS}
-	ld -T util/linker.ld --oformat=binary -o $@ ${OBJS}
+${BUILD}/kernel: util/linker.ld ${BUILD} ${OBJS} ${LIB_LUA}
+	ld -static -T util/linker.ld --oformat=binary -o $@ ${OBJS} ${CORE_O}
 
 
 ${BUILD}/kernel.elf: util/linker.ld ${BUILD} ${OBJS}
-	ld -T util/linker.ld --oformat=elf64-x86-64 -o $@ ${OBJS}
+	ld -static -T util/linker.ld --oformat=elf64-x86-64 -o $@ ${OBJS} build/obj/libluacore.a
 
 
 ${BUILD}/system: ${BUILD}/bootloader ${BUILD}/kernel
@@ -84,5 +96,6 @@ ${BUILD}/system: ${BUILD}/bootloader ${BUILD}/kernel
 
 clean:
 	rm -rf ${BUILD}
+	rm sub/lua/*.o
 
 .PHONY: clean all
