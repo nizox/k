@@ -1,21 +1,26 @@
 NASM = nasm
 CC = clang
 CXX = clang++
-CFLAGS = -m64 -W -nostdlib -fno-builtin -fno-stack-protector -mno-red-zone
+CFLAGS = -g -m64 -W -nostdlib -fno-builtin -fno-stack-protector -mno-red-zone
 CFLAGS += -Iinclude
 CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti -std=c++11
 BUILD = build
 
-CSRCS = 	src/c/start.c			\
-			src/c/interrupts.c 		\
+CSRCS = 	src/c/start.c		\
 			src/c/screen.c			\
 			src/c/string.c			\
 			src/c/print.c			\
 			src/c/printk.c
 
-CPPSRCS = 	src/_cplusplus.cpp		\
-			src/start.cpp			\
-			src/video.cpp
+CPPSRCS = 	src/_cplusplus.cpp				\
+			src/exceptions.cpp				\
+			src/isr.cpp						\
+			src/idt.cpp						\
+			src/start.cpp					\
+			src/video.cpp					\
+			src/memory.cpp					\
+			src/kheap.cpp					\
+			src/allocator.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 
@@ -63,7 +68,11 @@ ${BUILD}/obj/%.o: %.cpp
 
 
 ${BUILD}/kernel: util/linker.ld ${BUILD} ${OBJS}
-	ld -T util/linker.ld -o $@ ${OBJS}
+	ld -T util/linker.ld --oformat=binary -o $@ ${OBJS}
+
+
+${BUILD}/kernel.elf: util/linker.ld ${BUILD} ${OBJS}
+	ld -T util/linker.ld --oformat=elf64-x86-64 -o $@ ${OBJS}
 
 
 ${BUILD}/system: ${BUILD}/bootloader ${BUILD}/kernel

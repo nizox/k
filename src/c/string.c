@@ -1,96 +1,61 @@
 #include "c/string.h"
 
-MAKE_BASE_TABLE(2, "01", "b");
-MAKE_BASE_TABLE(3, "012", "");
-MAKE_BASE_TABLE(4, "0123", "");
-MAKE_BASE_TABLE(8, "01234567", "0");
-MAKE_BASE_TABLE(10, "0123456789", "");
-MAKE_BASE_TABLE(16, "0123456789abcdef", "0x");
+static const char       digits[16] = "0123456789ABCDEF";
 
-static const base_data   *choose_table(int base)
+char*
+number(uintptr_t num, char *buf, int base, uint8_t flags)
 {
-    switch (base)
-      {
-        case 2:
-            return &base2;
-        case 3:
-            return &base3;
-        case 4:
-            return &base4;
-        case 8:
-            return &base8;
-        case 16:
-            return &base16;
-        case 10:
-        default:
-            return &base10;
-      }
-}
+    ssize_t             i = 0;
+    char                locase = (flags & SMALL);
+    uint8_t             isneg = (intptr_t)num < 0 && (flags & SIGN) != 0;
 
-static int          in_base(char c, const base_data *bd)
-{
-    int             pos;
-
-    for (pos = 0; bd->base_table[pos] != 0; ++pos)
-      {
-        if (bd->base_table[pos] == c)
-            return pos;
-      }
-    return -1;
-}
-
-static int          max_power(int nbr, int base)
-{
-    int             power = 1;
-
-    for (power = 1; (nbr /= base); power *= base)
-        ;
-    return power;
-}
-
-char                *itoa(int nbr, char *buf, int radix)
-{
-    int             i = 0;
-    int             mult;
-    int             power = max_power(nbr, radix);
-    const base_data *bd = choose_table(radix);
-
-    if (nbr == 0)
-      {
-        strncpy(buf, bd->prefix, bd->prefix_len);
-        i += bd->prefix_len;
-        buf[i] = bd->base_table[0];
-        ++i;
-      }
+    if (num == 0)
+        buf[i++] = '0';
     else
       {
-        if (nbr < 0)
+        COND_SET_BIT(flags, isneg, SIGN);
+        COND_NEGATE(isneg, num);
+        while (num)
           {
-            buf[i] = '-';
-            ++i;
+            buf[i++] = digits[num % base] | locase;
+            num /= base;
           }
-        else
-            nbr = -nbr;
-
-        strncpy(buf + i, bd->prefix, bd->prefix_len);
-        i += bd->prefix_len;
-        while (power != 0)
+        if (flags & PREFIX && (base & (8 | 16)))
           {
-            mult = nbr / power;
-            buf[i] = bd->base_table[-mult];
-            nbr %= power;
-            power /= radix;
-            ++i;
+            if (base & 16)
+                buf[i++] = 'X' | locase;
+            buf[i++] = '0';
           }
+        if (flags & SIGN)
+            buf[i++] = '-';
       }
 
     buf[i] = 0;
+    strrev(buf, buf + i - 1);
+
     return buf;
 }
 
-long int            strtol(const char *ptr, char **endptr, int base)
+char*
+itoa(int num, char *buf, int radix)
 {
-    const base_data *bd = choose_table(base);
+    return number(num, buf, radix, SIGN);
+}
+
+int
+in_base(char c)
+{
+    size_t              i;
+
+    for (i = 0; i < 16; ++i)
+        if (c == digits[i])
+            return i;
+    return -1;
+}
+
+long int
+strtol(const char *ptr, char **endptr, int base)
+{
     int             isneg = 0;
     long int        number = 0;
     int             val;
@@ -105,7 +70,7 @@ long int            strtol(const char *ptr, char **endptr, int base)
                 isneg = 1;
                 break;
             default:
-                val = in_base(*ptr, bd);
+                val = in_base(*ptr);
                 if (val == -1)
                     goto end;
                 number = number * base - val;
@@ -114,14 +79,15 @@ long int            strtol(const char *ptr, char **endptr, int base)
       }
 
 end:
-    COND_NEGATE(isneg, number);
+    COND_NEGATE(!isneg, number);
 
     if (endptr != 0)
         *endptr = (char *)ptr;
     return number;
 }
 
-size_t              strlen(const char *str)
+size_t
+strlen(const char *str)
 {
     const char      *endptr;
 
@@ -130,7 +96,8 @@ size_t              strlen(const char *str)
     return endptr - str;
 }
 
-void                *memset(void *s, int c, size_t n)
+void*
+memset(void *s, int c, size_t n)
 {
     char            *ptr = (char *)s;
 
@@ -140,7 +107,8 @@ void                *memset(void *s, int c, size_t n)
     return s;
 }
 
-void                *memcpy(void *dest, const void *src, size_t n)
+void*
+memcpy(void *dest, const void *src, size_t n)
 {
     char            *cdest = (char *)dest;
     const char      *csrc = (char *)src;
@@ -151,7 +119,8 @@ void                *memcpy(void *dest, const void *src, size_t n)
     return dest;
 }
 
-char                *strcpy(char *dest, const char *src)
+char*
+strcpy(char *dest, const char *src)
 {
     char            *save = dest;
 
@@ -164,7 +133,8 @@ char                *strcpy(char *dest, const char *src)
     return save;
 }
 
-char                *strncpy(char *dest, const char *src, size_t n)
+char*
+strncpy(char *dest, const char *src, size_t n)
 {
     char            *save = dest;
 
@@ -178,7 +148,8 @@ char                *strncpy(char *dest, const char *src, size_t n)
     return save;
 }
 
-char                *strcat(char *dest, const char *src)
+char*
+strcat(char *dest, const char *src)
 {
     int             i = 0;
     int             j = 0;
@@ -195,7 +166,8 @@ char                *strcat(char *dest, const char *src)
     return dest;
 }
 
-char                *strncat(char *dest, const char *src, size_t n)
+char*
+strncat(char *dest, const char *src, size_t n)
 {
     int             i = 0;
     int             j = 0;
@@ -211,4 +183,14 @@ char                *strncat(char *dest, const char *src, size_t n)
       }
     dest[i] = 0;
     return dest;
+}
+
+char*
+strrev(char *begin, char *end)
+{
+    char    *save = begin;
+
+    for (; begin < end; ++begin, --end)
+        XOR_SWAP(*begin, *end);
+    return save;
 }

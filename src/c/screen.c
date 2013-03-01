@@ -1,10 +1,5 @@
 #include "c/screen.h"
-
-#define SCREEN_START    0xb8000
-#define SCREEN_SIZE     0xfa0
-#define SCREEN_END      SCREEN_START + SCREEN_SIZE
-#define COLUMNS         160
-#define LINES           24
+#include "c/memory.h"
 
 static cursor point;
 static char vga_attr;
@@ -18,7 +13,7 @@ static void         scroll(unsigned int n)
          video < (unsigned char*) SCREEN_END;
          video += 2)
       {
-        tmp = (unsigned char*) (video + n * COLUMNS);
+        tmp = (unsigned char*) (video + n * SCREEN_COLUMNS);
 
         if (tmp < (unsigned char*) SCREEN_END)
           {
@@ -68,7 +63,7 @@ static void         screen_write_char(char c)
         case '\r':
             point.x = 0;
         default:
-            video = (unsigned char*) ((unsigned char*)SCREEN_START + 1 * point.x + COLUMNS * point.y);
+            video = (unsigned char*) ((unsigned char*)SCREEN_START + 1 * point.x + SCREEN_COLUMNS * point.y);
             *video = c;
             *(video + 1) = vga_attr;
             point.x += 2;
@@ -79,8 +74,8 @@ static void         screen_write_char(char c)
               }
             break;
       }
-    if (point.y > LINES)
-        scroll(point.y - LINES);
+    if (point.y > SCREEN_LINES)
+        scroll(point.y - SCREEN_LINES);
 }
 
 void                 screen_write(const char *ptr, unsigned int size)

@@ -1,23 +1,33 @@
-#include "c/print.h"
-#include "c/screen.h"
-#include "c/interrupts.h"
-
+#include "isr.h"
 #include "video.h"
-#include "std.h"
+#include "kheap.h"
+#include "allocator.h"
+
+#include "c/string.h"
 
 /*
  * This is the entry point of the kernel
  * we must never return from this function
  */
 extern "C"
-void            _cppstart(void)
+void
+_cppstart(void)
 {
-    video       screen;
+    video               screen;
+    memory::info        info(AVAILABLE_MEMORY MEGABYTES, 2 MEGABYTES, memory::pml4, memory::pdp, memory::pd);
 
-    screen << "Loading IDT ..." << std::endl;
-    init_interrupts();
-    screen << "IDT loaded." << std::endl;
+    screen << "Initializing kernel heap ...";
+    kheap::brk          brk(info);
+    screen << " ok" << std::endl;
 
-    /* Put a fun message here */
+    screen << "Initializing allocator ...";
+    allocator           kmemalloc(brk);
+    global_allocator::set_allocator(&kmemalloc);
+    screen << " ok" << std::endl;
+
+    screen << "Loading IDT ...";
+    _isr.setup();
+    screen << " ok" << std::endl;
+
     for(;;);
 }
