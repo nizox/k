@@ -10,7 +10,7 @@ idt::set_gate(short i, void (*ptr)(), idt::gate_type type, short dpl)
         .reserved0 = 0, /* Do not use */
         .type = type,
         .reserved1 = 0, /* Do not use */
-        .dpl = dpl,
+        .dpl = static_cast<uint64_t>(dpl),
         .p = 1, /* Set it active */
         .high_word = ((uint64_t) ptr >> 16) & 0xFFFF, /* Next 16 bits */
         .high_dword = (uint64_t) ptr >> 32, /* Last 32 bits */

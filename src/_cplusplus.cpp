@@ -56,3 +56,12 @@ void            operator delete[](void *ptr)
     if (alc)
         alc->free(ptr);
 }
+
+namespace std
+{
+    void
+    __throw_bad_alloc()
+    {
+        // do nothing bitch
+    }
+}
