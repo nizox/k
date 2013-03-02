@@ -24,7 +24,8 @@ CPPSRCS = 	src/_cplusplus.cpp				\
 			src/cpu.cpp						\
 			src/apic.cpp					\
 			src/ioapic.cpp					\
-			src/scheduler.cpp
+			src/scheduler.cpp				\
+			src/lock.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 
