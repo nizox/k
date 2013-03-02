@@ -35,13 +35,13 @@ class local_apic
         timer_initial_count         = 0x380,
         timer_current_count         = 0x390,
         timer_divide_configuration  = 0x3E0,
-
     };
 
     local_apic(register_t * base_addr = (register_t *) LOCAL_APIC_ADDR);
     ~local_apic();
 
     int get_id();
+    void send_eoi(register_t value = 0x0);
     void setup();
     void enable();
 

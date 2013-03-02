@@ -44,6 +44,7 @@ _cppstart(void)
     ioapic.setup();
     screen << " ok" << std::endl;
 
+    _keyboard = &keyboard;
     keyboard.setup();
 
     cpu.enable_interrupts();

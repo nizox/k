@@ -94,6 +94,7 @@ class ioapic
     ioapic(cpu & default_cpu, register_t * base_addr = (register_t *) IOAPIC_ADDR);
     ~ioapic();
 
+    cpu & get_cpu_for_irq(uint32_t irq);
     void default_redirect_irq(uint32_t irq, uint32_t int_vector);
 
     void setup();

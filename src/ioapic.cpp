@@ -1,3 +1,4 @@
+#include "cpu.h"
 #include "ioapic.h"
 
 ioapic_redirect_entry::ioapic_redirect_entry(ioapic & io, int index):
@@ -67,4 +68,10 @@ ioapic::default_redirect_irq(uint32_t irq, uint32_t vector)
     entry.set_vector(vector);
     entry.set_physical_destination(main_cpu.get_local_apic().get_id());
     entry.commit();
+}
+
+cpu &
+ioapic::get_cpu_for_irq(uint32_t irq)
+{
+    return main_cpu;
 }

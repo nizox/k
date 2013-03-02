@@ -17,6 +17,12 @@ local_apic::get_id()
 }
 
 void
+local_apic::send_eoi(local_apic::register_t value)
+{
+    set(local_apic::eoi, value);
+}
+
+void
 local_apic::setup()
 {
     /* Set destination format to flat mode */
