@@ -7,6 +7,14 @@
 
 #include "c/string.h"
 
+#include "scheduler.h"
+
+int test(video &s)
+{
+    s << "Hello world" << std::endl;
+    return 0;
+}
+
 /*
  * This is the entry point of the kernel
  * we must never return from this function
@@ -49,5 +57,24 @@ _cppstart(void)
     global_allocator::set_allocator(&kmemalloc);
     screen << " ok" << std::endl;
 
-    for(;;);
+    // Start scheduling
+    {
+        task::scheduler s;
+
+        task::task rec;
+
+        rec = [&] () -> int {
+            screen << "Very long operation !" << std::endl;
+            for (int i = 0; i < 1000000000; ++i);
+            s.post(rec);
+            return 0;
+        };
+
+        rec();
+        s.post([&] () -> int {
+            screen << "This one, only once !" << std::endl;
+            return 0;
+        });
+        s.run();
+    }
 }

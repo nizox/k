@@ -3,7 +3,7 @@ CC = clang
 CXX = clang++
 CFLAGS = -g -m64 -W -nostdlib -fno-builtin -fno-stack-protector -mno-red-zone
 CFLAGS += -Iinclude
-CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti
+CXXFLAGS = ${CFLAGS} -fno-exceptions -fno-rtti -std=c++11
 BUILD = build
 
 CSRCS = 	src/c/start.c		\
@@ -21,9 +21,10 @@ CPPSRCS = 	src/_cplusplus.cpp				\
 			src/memory.cpp					\
 			src/kheap.cpp					\
 			src/allocator.cpp				\
-			src/cpu.cpp					\
+			src/cpu.cpp						\
 			src/apic.cpp					\
-			src/ioapic.cpp
+			src/ioapic.cpp					\
+			src/scheduler.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 
