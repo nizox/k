@@ -118,6 +118,11 @@ memcpy(void *dest, const void *src, size_t n)
 
     return dest;
 }
+void*
+memmove(void *dest, const void *src, size_t n)
+{
+    return memcpy(dest, src, n);
+}
 
 char*
 strcpy(char *dest, const char *src)
