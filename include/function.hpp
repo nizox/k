@@ -70,7 +70,7 @@ struct function<return_type (args_types...)>
   ~function()
   {
       if (_holder != nullptr)
-          delete  (detail::holder *)_holder;
+          operator delete(_holder);
   }
 
  private:
@@ -113,7 +113,7 @@ struct function<void (args_types...)>
   ~function()
   {
       if (_holder != nullptr)
-          delete  (detail::holder *)_holder;
+          operator delete(_holder);
   }
 
  private:
