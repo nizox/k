@@ -12,7 +12,8 @@ EXC_FUNC(exc_keyboard, 33)(struct exception_frame *frame)
     _keyboard->interrupt();
 }
 
-keyboard::keyboard(ioapic & ioapic): _ioapic(ioapic)
+keyboard::keyboard(ioapic & ioapic, task::scheduler & sched):
+    _ioapic(ioapic), _sched(sched)
 {
 }
 
@@ -23,7 +24,10 @@ keyboard::~keyboard()
 void
 keyboard::interrupt()
 {
-    handle_key();
+    _sched.post([&] () -> int {
+        this->handle_key();
+        return 0;
+    });
     _ioapic.get_cpu_for_irq(0).get_local_apic().send_eoi();
 }
 

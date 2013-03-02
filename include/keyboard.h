@@ -2,11 +2,12 @@
 #define KEYBOARD_H
 
 #include "ioapic.h"
+#include "scheduler.h"
 
 class keyboard
 {
   public:
-    keyboard(ioapic & ioapic);
+    keyboard(ioapic & ioapic, task::scheduler & sched);
     ~keyboard();
 
     void setup();
@@ -18,6 +19,7 @@ class keyboard
     bool is_buffer_ready();
 
     ioapic & _ioapic;
+    task::scheduler & _sched;
 };
 
 extern keyboard *_keyboard;

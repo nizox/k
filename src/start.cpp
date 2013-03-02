@@ -27,7 +27,6 @@ _cppstart(void)
     video               screen;
     cpu                 cpu;
     ioapic              ioapic(cpu);
-    keyboard            keyboard(ioapic);
 
     /* Interrupts are disabled by the bootloader but we want it to be clear */
     cpu.disable_interrupts();
@@ -43,9 +42,6 @@ _cppstart(void)
     screen << "Initializing IOAPIC ...";
     ioapic.setup();
     screen << " ok" << std::endl;
-
-    _keyboard = &keyboard;
-    keyboard.setup();
 
     cpu.enable_interrupts();
 
@@ -63,23 +59,11 @@ _cppstart(void)
     screen << " ok" << std::endl;
 
     // Start scheduling
-    {
-        task::scheduler s;
+    task::scheduler s;
+    keyboard keyboard(ioapic, s);
 
-        task::task rec;
+    _keyboard = &keyboard;
+    keyboard.setup();
 
-        rec = [&] () -> int {
-            screen << "Very long operation !" << std::endl;
-            for (int i = 0; i < 1000000000; ++i);
-            s.post(rec);
-            return 0;
-        };
-
-        rec();
-        s.post([&] () -> int {
-            screen << "This one, only once !" << std::endl;
-            return 0;
-        });
-        s.run();
-    }
+    s.run();
 }
