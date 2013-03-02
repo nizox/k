@@ -4,6 +4,7 @@
 #include "allocator.h"
 #include "cpu.h"
 #include "ioapic.h"
+#include "keyboard.h"
 
 #include "c/string.h"
 
@@ -26,6 +27,7 @@ _cppstart(void)
     video               screen;
     cpu                 cpu;
     ioapic              ioapic(cpu);
+    keyboard            keyboard(ioapic);
 
     /* Interrupts are disabled by the bootloader but we want it to be clear */
     cpu.disable_interrupts();
@@ -41,6 +43,8 @@ _cppstart(void)
     screen << "Initializing IOAPIC ...";
     ioapic.setup();
     screen << " ok" << std::endl;
+
+    keyboard.setup();
 
     cpu.enable_interrupts();
 

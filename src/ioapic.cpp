@@ -49,10 +49,22 @@ ioapic::setup()
     uint64_t i;
     uint64_t max = get_max_redirect_entry();
 
-    for (i = 0; i < max; ++i)
-    {
-        ioapic_redirect_entry entry = get_redirect_entry(i);
-        entry.mask();
-        entry.commit();
-    }
+    /* IO APIC never send us interrupts when we unmask redirect entries */
+//    for (i = 0; i < max; ++i)
+//    {
+//        ioapic_redirect_entry entry = get_redirect_entry(i);
+//        entry.mask();
+//        entry.commit();
+//    }
+}
+
+void
+ioapic::default_redirect_irq(uint32_t irq, uint32_t vector)
+{
+    ioapic_redirect_entry entry = get_redirect_entry(irq);
+
+    entry.unmask();
+    entry.set_vector(vector);
+    entry.set_physical_destination(main_cpu.get_local_apic().get_id());
+    entry.commit();
 }

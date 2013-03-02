@@ -53,3 +53,9 @@ isr::setup()
 
     _idt.setup();
 }
+
+void
+isr::set_interrupt_gate(short i, void (*ptr)())
+{
+    _idt.set_gate(i, ptr);
+}

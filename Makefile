@@ -25,7 +25,8 @@ CPPSRCS = 	src/_cplusplus.cpp				\
 			src/apic.cpp					\
 			src/ioapic.cpp					\
 			src/scheduler.cpp				\
-			src/lock.cpp
+			src/lock.cpp					\
+			src/keyboard.cpp
 
 OBJS = ${OBJ} $(addprefix ${BUILD}/obj/,${CSRCS:.c=.o} ${CPPSRCS:.cpp=.o})
 

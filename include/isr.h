@@ -6,6 +6,7 @@
 class isr
 {
  public:
+    void set_interrupt_gate(short i, void (*ptr)());
     void setup();
 
  private:

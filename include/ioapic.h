@@ -26,9 +26,15 @@ class ioapic_redirect_entry
         value.e.mask = 0;
     }
 
-    void set_destination_mode(destination_mode mode)
+    void set_vector(int vector)
     {
-        value.e.destination_mode = mode;
+        value.e.vector = vector;
+    }
+
+    void set_physical_destination(int apic_id)
+    {
+        value.e.destination_mode = physical;
+        value.e.destination = apic_id;
     }
 
     void commit();
@@ -88,11 +94,12 @@ class ioapic
     ioapic(cpu & default_cpu, register_t * base_addr = (register_t *) IOAPIC_ADDR);
     ~ioapic();
 
-    uint64_t get_max_redirect_entry() const;
+    void default_redirect_irq(uint32_t irq, uint32_t int_vector);
 
     void setup();
 
   private:
+    uint64_t get_max_redirect_entry() const;
     ioapic_redirect_entry get_redirect_entry(int index);
 
     inline register_t get(uint32_t index) const
